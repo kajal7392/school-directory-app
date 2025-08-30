@@ -1,0 +1,13 @@
+CREATE DATABASE IF NOT EXISTS `school-app`;
+USE `school-app`;
+
+CREATE TABLE schools (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(255) NOT NULL,
+  address TEXT NOT NULL,
+  city VARCHAR(100) NOT NULL,
+  state VARCHAR(100) NOT NULL,
+  contact VARCHAR(15) NOT NULL,
+  image VARCHAR(255) NOT NULL, 
+  email_id VARCHAR(255) NOT NULL
+);
