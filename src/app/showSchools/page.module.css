@@ -1,0 +1,277 @@
+.container {
+  max-width: 1200px;
+  margin: 3rem auto;
+  padding: 2rem;
+}
+
+.heading {
+  text-align: center;
+  font-size: 2.5rem;
+  font-weight: 600;
+  margin-bottom: 2.5rem;
+  color: #1f2937;
+}
+
+.schoolsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+}
+
+.schoolCard {
+  background-color: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.schoolCard:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 22px rgba(0, 0, 0, 0.12);
+}
+
+.schoolCard img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.cardContent {
+  padding: 1rem 1.2rem;
+}
+
+.cardContent h2 {
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: #111827;
+}
+
+.cardContent p {
+  font-size: 0.95rem;
+  color: #4b5563;
+  margin-bottom: 0.25rem;
+}
+
+@media (max-width: 640px) {
+  .heading {
+    font-size: 1.8rem;
+  }
+
+  .schoolCard img {
+    height: 150px;
+  }
+}
+
+/* Add these styles to your existing CSS file */
+
+/* Controls Section */
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  align-items: end;
+}
+
+.searchSection {
+  flex: 1;
+  min-width: 250px;
+}
+
+.filterSection {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.searchInput {
+  width: 100%;
+  padding: 0.75rem;
+  border: 2px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 1rem;
+}
+
+.filterSelect,
+.sortSelect {
+  padding: 0.75rem;
+  border: 2px solid #e2e8f0;
+  border-radius: 8px;
+  background: white;
+}
+
+/* Results Info */
+.resultsInfo {
+  margin-bottom: 1rem;
+  color: #64748b;
+}
+
+/* Skeleton Loader */
+.skeletonCard {
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.skeletonImage {
+  width: 100%;
+  height: 200px;
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: loading 1.5s infinite;
+}
+
+.skeletonContent {
+  padding: 1rem;
+}
+
+.skeletonLine {
+  height: 16px;
+  background: #f0f0f0;
+  margin-bottom: 0.5rem;
+  border-radius: 4px;
+}
+
+.skeletonLine:first-child {
+  width: 80%;
+}
+
+.skeletonLine:nth-child(2) {
+  width: 60%;
+}
+
+.skeletonLine:last-child {
+  width: 40%;
+}
+
+@keyframes loading {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* Error State */
+.errorState {
+  text-align: center;
+  padding: 3rem;
+  color: #dc2626;
+}
+
+.retryButton {
+  background: #dc2626;
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-top: 1rem;
+}
+
+/* Empty State */
+.emptyState {
+  text-align: center;
+  padding: 3rem;
+  color: #64748b;
+}
+
+.addSchoolLink {
+  display: inline-block;
+  background: #3b82f6;
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  text-decoration: none;
+  margin-top: 1rem;
+}
+
+/* Enhanced School Card */
+.imageContainer {
+  position: relative;
+  overflow: hidden;
+}
+
+.schoolImage {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.imageContainer:hover .schoolImage {
+  transform: scale(1.05);
+}
+
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.imageContainer:hover .overlay {
+  opacity: 1;
+}
+
+.viewButton {
+  background: white;
+  color: #1f2937;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+/* Card Actions */
+.cardActions {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.favoriteBtn,
+.shareBtn {
+  padding: 0.5rem;
+  border: 1px solid #e2e8f0;
+  background: white;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.875rem;
+}
+
+/* Pagination */
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 2rem;
+  padding: 1rem;
+}
+
+.paginationButton {
+  padding: 0.5rem 1rem;
+  border: 1px solid #e2e8f0;
+  background: white;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.paginationButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.pageInfo {
+  color: #64748b;
+  font-weight: 500;
+}

@@ -39,3 +39,14 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+.next/cache
+
+
+# local env files
+.env.local
+
+# Ignore database connection files
+src/lib/db.ts
+
+# MySQL 
+.sql*
