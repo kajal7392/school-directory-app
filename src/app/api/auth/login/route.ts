@@ -72,7 +72,8 @@ export async function POST(request: Request) {
     // Prepare response, exclude password_hash
     const { password_hash, ...userWithoutPassword } = user;
     console.log('Login successful for user:', user.username);
-
+    console.log("Password hash generated:", password_hash);
+    
     const response = NextResponse.json({
       message: 'Login successful',
       user: userWithoutPassword,

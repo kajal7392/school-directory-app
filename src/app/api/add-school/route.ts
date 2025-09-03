@@ -138,10 +138,7 @@ export async function POST(request: NextRequest) {
 
     // Insert into database
     const result = await query<InsertResult>({
-      query: `
-        INSERT INTO schools (name, address, city, state, contact, image, email_id) 
-        VALUES (?, ?, ?, ?, ?, ?, ?)
-      `,
+      query: "INSERT INTO schools (name, address, city, state, contact, image, email_id) VALUES (?, ?, ?, ?, ?, ?, ?)",
       values: [name, address, city, state, contact, imagePath, email_id],
     });
 
