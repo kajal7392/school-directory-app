@@ -100,39 +100,57 @@ This application provides an **admin dashboard** for managing school information
 ## 📁 Project Structure
 
 SCHOOL-DIRECTORY-APP
+├─ .next/
+├─ node_modules/
 ├─ public/
-│ ├─ schoolImages/ # Uploaded school images
-│ └─ avatars/ # User/Admin avatars
+│   ├─ schoolImages/       # Uploaded school images
+│   └─ avatars/            # Optional: user/admin avatars
 ├─ src/
-│ ├─ app/
-│ │ ├─ addSchool/ # Add School Page
-│ │ ├─ showSchools/ # School Listing Page
-│ │ ├─ login/ # Authentication Page
-│ │ ├─ api/ # Next.js API Routes
-│ │ │ ├─ add-school/
-│ │ │ ├─ get-schools/
-│ │ │ └─ auth/ # Login, Logout, Me
-│ │ ├─ globals.css
-│ │ └─ layout.tsx
-│ ├─ components/
-│ │ └─ ProtectedRoute.tsx
-│ ├─ context/
-│ │ └─ AuthContext.tsx
-│ ├─ lib/
-│ │ ├─ db.ts # MySQL connection
-│ │ ├─ auth.ts
-│ │ └─ avatar.ts
-│ └─ types/
-│ └─ database.ts
-├─ schema.sql # Database schema
-├─ admin.sql # Optional: Admin seed
+│   ├─ app/
+│   │   ├─ addSchool/
+│   │   │   ├─ page.tsx
+│   │   │   └─ page.module.css
+│   │   ├─ showSchools/
+│   │   │   ├─ page.tsx
+│   │   │   └─ page.module.css
+│   │   ├─ dashboard.css
+│   │   ├─ globals.css
+│   │   ├─ layout.tsx
+│   │   ├─ login/
+│   │   │   └─ page.tsx
+│   │   └─ api/
+│   │       ├─ add-school/
+│   │       │   └─ route.ts
+│   │       ├─ auth/
+│   │       │   ├─ login/route.ts
+│   │       │   ├─ logout/route.ts
+│   │       │   └─ me/route.ts
+│   │       └─ get-schools/
+│   │           └─ route.ts
+│   ├─ components/
+│   │   └─ ProtectedRoute.tsx
+│   ├─ context/
+│   │   └─ AuthContext.tsx
+│   ├─ lib/
+│   │   ├─ auth.ts
+│   │   ├─ avatar.ts
+│   │   └─ db.ts
+│   └─ types/
+│       └─ database.ts
+├─ .env.local
+├─ .gitignore
+├─ admin.sql             # Admin table creation (optional)
+├─ schema.sql            # Existing database schema
+├─ eslint.config.mjs
+├─ FETCH_HEAD
+├─ git/
 ├─ next.config.ts
+├─ package-lock.json
 ├─ package.json
-├─ tsconfig.json
-└─ README.md
+├─ postcss.config.mjs
+├─ README.md
+└─ tsconfig.json
 
-yaml
-Copy code
 
 ---
 
