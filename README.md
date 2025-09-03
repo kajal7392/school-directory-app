@@ -86,6 +86,7 @@ This application provides an **admin dashboard** for managing school information
 
 ---
 
+<<<<<<< HEAD
 ## 📁 Project Structure
 
 SCHOOL-DIRECTORY-APP
@@ -124,6 +125,8 @@ yaml
 Copy code
 
 ---
+=======
+>>>>>>> 5791c76 (Update README.md)
 
 ## ⚙️ Installation
 
