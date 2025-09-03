@@ -11,69 +11,57 @@ This application provides an **admin dashboard** for managing school information
 
 ---
 
-## 🌐 Live Demo
+## Live Demo
 
 - **Live App:** [School Directory App](https://school-directory-app-gamma.vercel.app/)  
 - **GitHub Repo:** [kajal7392/school-directory-app](https://github.com/kajal7392/school-directory-app.git)
 
 ---
 
-## 📋 Table of Contents
+## Table of Contents
 
-- [✨ Features](#-features)
-- [🛠️ Tech Stack](#️-tech-stack)
-- [📁 Project Structure](#-project-structure)
-- [⚙️ Installation](#️-installation)
-- [🔑 Environment Variables](#-environment-variables)
-- [🗄️ Database Setup](#️-database-setup)
-- [📖 Usage](#-usage)
-- [🔌 API Endpoints](#-api-endpoints)
-- [🚀 Deployment](#-deployment)
-- [🤝 Contributing](#-contributing)
-- [📄 License](#-license)
-- [📞 Support](#-support)
-- [🙏 Acknowledgments](#-acknowledgments)
+- [Features](#-features)
+- [Tech Stack](#️-tech-stack)
+- [Installation](#️-installation)
+- [Environment Variables](#-environment-variables)
+- [Database Setup](#️-database-setup)
+- [Usage](#-usage)
+- [API Endpoints](#-api-endpoints)
+- [Deployment](#-deployment)
+- [Contributing](#-contributing)
+- [License](#-license)
+- [Support](#-support)
+- [Acknowledgments](#-acknowledgments)
 
 ---
 
-## ✨ Features
+## Features
 
-- 🔐 **Authentication** – Secure login/logout with JWT  
-- 👨‍💼 **Admin Dashboard** – Manage schools, view analytics, role-based access  
-- 🏫 **School Management** – Add, update, and list school information  
-- 📊 **Data Visualization** – Dashboard with real-time statistics  
-- 📱 **Responsive UI** – Optimized for desktop and mobile devices  
-- 🖼️ **Image Uploads** – School logos and photos supported  
-- ⚡ **Optimized Performance** – Built with **Next.js 15** for speed  
+- **Authentication** – Secure login/logout with JWT  
+- **Admin Dashboard** – Manage schools, view analytics, role-based access  
+- **School Management** – Add, update, and list school information  
+- **Data Visualization** – Dashboard with real-time statistics  
+- **Responsive UI** – Optimized for desktop and mobile devices  
+- **Image Uploads** – School logos and photos supported  
+- **Optimized Performance** – Built with **Next.js 15.5.2** for speed  
 
+### Screenshots
 
-
+**Authentication**  
 ![Authentication section](image.png)
 
-
----
-
-
+**Dashboard View**  
 ![Dashboard view](image-1.png)
 
-
----
-
-
+**Add School**  
 ![Add School functionality](image-2.png)
 
+**View Schools**  
+![View Schools functionality](image-3.png)
 
 ---
 
-
-![View Schools functionality](image-3.png)
-
-
-
-----
-
-
-## 🛠️ Tech Stack
+## Tech Stack
 
 **Frontend**
 - Next.js 15.5.2  
@@ -97,89 +85,61 @@ This application provides an **admin dashboard** for managing school information
 
 ---
 
-## 📁 Project Structure
-
-SCHOOL-DIRECTORY-APP
-├─ public/
-│ ├─ schoolImages/ # Uploaded school images
-│ └─ avatars/ # User/Admin avatars
-├─ src/
-│ ├─ app/
-│ │ ├─ addSchool/ # Add School Page
-│ │ ├─ showSchools/ # School Listing Page
-│ │ ├─ login/ # Authentication Page
-│ │ ├─ api/ # Next.js API Routes
-│ │ │ ├─ add-school/
-│ │ │ ├─ get-schools/
-│ │ │ └─ auth/ # Login, Logout, Me
-│ │ ├─ globals.css
-│ │ └─ layout.tsx
-│ ├─ components/
-│ │ └─ ProtectedRoute.tsx
-│ ├─ context/
-│ │ └─ AuthContext.tsx
-│ ├─ lib/
-│ │ ├─ db.ts # MySQL connection
-│ │ ├─ auth.ts
-│ │ └─ avatar.ts
-│ └─ types/
-│ └─ database.ts
-├─ schema.sql # Database schema
-├─ admin.sql # Optional: Admin seed
-├─ next.config.ts
-├─ package.json
-├─ tsconfig.json
-└─ README.md
-
-yaml
-Copy code
-
----
-
-## ⚙️ Installation
+## Installation
 
 Clone repository:
 
 ```bash
 git clone https://github.com/kajal7392/school-directory-app.git
 cd school-directory-app
+```
+
 Install dependencies:
 
-bash
-Copy code
+```bash
 npm install
+```
+
 Run development server:
 
-bash
-Copy code
+```bash
 npm run dev
-🔑 Environment Variables
-Create a .env.local file:
+```
 
-env
-Copy code
+---
+
+## Environment Variables
+
+Create a `.env.local` file in the root:
+
+```env
 DATABASE_HOST=localhost
 DATABASE_USER=root
 DATABASE_PASSWORD=your_password
 DATABASE_NAME=school_directory
-
 JWT_SECRET=your_jwt_secret
 NEXT_PUBLIC_BASE_URL=http://localhost:3000
-🗄️ Database Setup
-Create database:
+```
 
-sql
-Copy code
+---
+
+## Database Setup
+
+Create the database:
+
+```sql
 CREATE DATABASE school_directory;
+```
+
 Import schema:
 
-bash
-Copy code
+```bash
 mysql -u username -p school_directory < schema.sql
+```
+
 Example tables:
 
-sql
-Copy code
+```sql
 CREATE TABLE schools (
   id INT AUTO_INCREMENT PRIMARY KEY,
   name VARCHAR(255) NOT NULL,
@@ -201,81 +161,85 @@ CREATE TABLE users (
   avatar VARCHAR(255),
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
-📖 Usage
-Visit: http://localhost:3000
+```
+
+---
+
+## Usage
+
+Visit: [http://localhost:3000](http://localhost:3000)
 
 Login with default admin credentials:
 
-makefile
-Copy code
+```
 Username: admin
 Password: admin123
-Navigate the dashboard → Add/View schools → Check stats
+```
 
-Logout securely when finished
+Navigate the dashboard → Add/View schools → Check stats → Logout securely when finished.
 
-🔌 API Endpoints
-Auth
+---
 
-POST /api/auth/login – User login
+## API Endpoints
 
-POST /api/auth/logout – User logout
+### Auth
+- `POST /api/auth/login` – User login  
+- `POST /api/auth/logout` – User logout  
+- `GET /api/auth/me` – Current user  
 
-GET /api/auth/me – Current user
+### Schools
+- `GET /api/get-schools` – Fetch all schools  
+- `POST /api/add-school` – Add new school  
+- `GET /api/school-stats` – Statistics  
 
-Schools
+### Utility
+- `GET /api/health` – Health check  
+- `GET /api/test-connection` – DB test  
 
-GET /api/get-schools – Fetch all schools
+---
 
-POST /api/add-school – Add new school
+## 🚀 Deployment
 
-GET /api/school-stats – Statistics
+### Vercel
+1. Push code to GitHub  
+2. Connect repo to Vercel  
+3. Add environment variables in Vercel dashboard  
+4. Deploy automatically  
 
-Utility
-
-GET /api/health – Health check
-
-GET /api/test-connection – DB test
-
-🚀 Deployment
-Vercel
-
-Push code to GitHub
-
-Connect repo to Vercel
-
-Add environment variables in Vercel dashboard
-
-Deploy automatically
-
-Manual
-
-bash
-Copy code
+### Manual
+```bash
 npm run build
 npm start
-🤝 Contributing
-Fork the repo
+```
 
-Create feature branch → git checkout -b feature/AmazingFeature
+---
 
-Commit changes → git commit -m 'Add AmazingFeature'
+## Contributing
 
-Push branch → git push origin feature/AmazingFeature
+1. Fork the repo  
+2. Create feature branch → `git checkout -b feature/AmazingFeature`  
+3. Commit changes → `git commit -m 'Add AmazingFeature'`  
+4. Push branch → `git push origin feature/AmazingFeature`  
+5. Open Pull Request  
 
-Open Pull Request
+---
 
-📄 License
-Licensed under the MIT License.
-See LICENSE for details.
+## 📄 License
 
-📞 Support
-For questions or issues, open a GitHub Issue in the repo:
-👉 School Directory App Issues
+Licensed under the **MIT License**.  
+See [LICENSE](LICENSE) for details.
 
-🙏 Acknowledgments
-Next.js team for the amazing framework
+---
 
-Vercel for seamless deployment
+## Support
 
-MySQL for reliable database management
+For questions or issues, open a GitHub Issue:  
+[School Directory App Issues](https://github.com/kajal7392/school-directory-app/issues)
+
+---
+
+## Acknowledgments
+
+- Next.js team for the amazing framework  
+- Vercel for seamless deployment  
+- MySQL for reliable database management  
