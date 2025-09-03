@@ -30,3 +30,4 @@ export async function query<T = any>({
   const [results] = await pool.execute<mysql.RowDataPacket[] | mysql.OkPacket>(query, values);
   return results as unknown as T;
 }
+  

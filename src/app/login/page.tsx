@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
+import './login.css';
 
 export default function LoginPage() {
   const [username, setUsername] = useState('');
