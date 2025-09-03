@@ -91,7 +91,7 @@ export default function AddSchool() {
             {/* School Name Field */}
             <div>
               <label htmlFor="name" className={styles.label}>
-                School Name *
+                School Name
               </label>
               <input
                 type="text"
@@ -116,7 +116,7 @@ export default function AddSchool() {
             {/* Address Field */}
             <div>
               <label htmlFor="address" className={styles.label}>
-                Address *
+                Address
               </label>
               <input
                 type="text"
@@ -141,7 +141,7 @@ export default function AddSchool() {
             {/* City Field */}
             <div>
               <label htmlFor="city" className={styles.label}>
-                City *
+                City
               </label>
               <input
                 type="text"
@@ -166,7 +166,7 @@ export default function AddSchool() {
             {/* State Field */}
             <div>
               <label htmlFor="state" className={styles.label}>
-                State *
+                State
               </label>
               <input
                 type="text"
@@ -191,7 +191,7 @@ export default function AddSchool() {
             {/* Contact Number Field */}
             <div>
               <label htmlFor="contact" className={styles.label}>
-                Contact Number *
+                Contact Number
               </label>
               <input
                 type="tel"
@@ -220,7 +220,7 @@ export default function AddSchool() {
             {/* Email Field */}
             <div>
               <label htmlFor="email_id" className={styles.label}>
-                Email Address *
+                Email Address
               </label>
               <input
                 type="email"
@@ -242,7 +242,7 @@ export default function AddSchool() {
           {/* Image Upload Section */}
           <div className={styles.imageSection}>
             <label htmlFor="image" className={styles.label}>
-              School Image *
+              School Image
             </label>
             <input
               type="file"

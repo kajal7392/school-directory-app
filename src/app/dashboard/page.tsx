@@ -133,9 +133,6 @@ export default function Home() {
                   <p className="mb-2">
                     Most Viewed: <span className="font-semibold">{mostViewed}</span>
                   </p>
-                  <p>
-                    ⭐ Favourites: <span className="font-semibold">{favouritesCount}</span>
-                  </p>
                 </>
               )}
             </div>
@@ -147,7 +144,7 @@ export default function Home() {
             <section className="welcome-section">
               <div className="welcome-header">
                 <div className="welcome-text">
-                  <h2>🎯 Welcome, Admin!</h2>
+                  <h2> Welcome, Admin!</h2>
                   <p>Manage your school database efficiently with our admin tools.</p>
                 </div>
                 <div className="date-display">

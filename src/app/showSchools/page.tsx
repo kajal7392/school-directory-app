@@ -108,11 +108,11 @@ export default function ShowSchools() {
         <div className={styles.searchSection}>
           <input
             type="text"
-            placeholder="🔍 Search by name or city..."
+            placeholder="Search by name or city..."
             value={searchTerm}
             onChange={(e) => {
               setSearchTerm(e.target.value);
-              setCurrentPage(1); // Reset to first page on search
+              setCurrentPage(1); 
             }}
             className={styles.searchInput}
           />
@@ -178,10 +178,6 @@ export default function ShowSchools() {
                   <h3 className={styles.schoolName}>{school.name}</h3>
                   <p className={styles.schoolAddress}>{school.address}</p>
                   <p className={styles.schoolCity}>{school.city}</p>
-                  <div className={styles.cardActions}>
-                    <button className={styles.favoriteBtn}>⭐ Favorite</button>
-                    <button className={styles.shareBtn}>📤 Share</button>
-                  </div>
                 </div>
               </div>
             ))}

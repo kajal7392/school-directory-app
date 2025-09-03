@@ -22,17 +22,42 @@ export default function HomePage() {
   }, [user, loading, router]);
 
   // Show loading while checking authentication
+  // Show loading while checking authentication
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-lg">Loading...</div>
+      <div className="loading-container">
+        <div className="loading-content">
+          <div className="loading-spinner">
+            <div className="spinner-ring"></div>
+            <div className="spinner-ring"></div>
+            <div className="spinner-ring"></div>
+          </div>
+          <div className="loading-text">Loading School Manager</div>
+          <div className="loading-subtext">Preparing your experience...</div>
+          <div className="loading-progress">
+            <div className="progress-bar"></div>
+          </div>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center">
-      <div className="text-lg">Redirecting...</div>
+    <div className="loading-container">
+      <div className="loading-content">
+        <div className="loading-spinner">
+          <div className="spinner-ring"></div>
+          <div className="spinner-ring"></div>
+          <div className="spinner-ring"></div>
+        </div>
+        <div className="loading-text">Redirecting</div>
+        <div className="loading-subtext">Taking you to the right place...</div>
+        <div className="loading-dots">
+          <div className="dot"></div>
+          <div className="dot"></div>
+          <div className="dot"></div>
+        </div>
+      </div>
     </div>
   );
 }

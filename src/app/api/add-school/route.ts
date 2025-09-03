@@ -1,8 +1,8 @@
-import { query } from '@/lib/db';
 import { NextRequest, NextResponse } from 'next/server';
 import path from 'path';
 import { verifyToken } from '@/lib/auth';
 import fs from 'fs/promises';
+import { getPool } from '@/lib/db';
 
 interface UserRole {
   role: string;
@@ -13,6 +13,10 @@ interface InsertResult {
 }
 
 export async function POST(request: NextRequest) {
+  // Get connection pool
+  const pool = getPool();
+  let connection;
+  
   try {
     let token: string | null = null;
     // Authentication check
@@ -42,25 +46,31 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Invalid token' }, { status: 401 });
     }
 
-    // Authorization check - using users table instead of admins
-    const user = await query<UserRole[]>({
-      query: 'SELECT role FROM users WHERE id = ?',
-      values: [decoded.userId],
-    });
+    // Get a connection from the pool for the transaction
+    connection = await pool.getConnection();
 
-    console.log('User  role:', user);
+    // Authorization check - using users table instead of admins
+    const [userRows] = await connection.execute(
+      'SELECT role FROM users WHERE id = ?',
+      [decoded.userId]
+    );
+    
+    const user = userRows as UserRole[];
+
+    console.log('User role:', user);
 
     if (!user || user.length === 0) {
-      console.log('User  not found in database');
+      console.log('User not found in database');
       return NextResponse.json({ error: 'Unauthorized' }, { status: 403 });
     }
 
     if (user[0].role !== 'admin') {
-      console.log('User  is not an admin, role:', user[0].role);
+      console.log('User is not an admin, role:', user[0].role);
       return NextResponse.json({ error: 'Admin privileges required' }, { status: 403 });
     }
 
-    console.log('User  authorized as admin, proceeding with school addition');
+    console.log('User authorized as admin, proceeding with school addition');
+    
     // Parse form data
     const formData = await request.formData();
 
@@ -136,16 +146,18 @@ export async function POST(request: NextRequest) {
 
     const imagePath = `/schoolImages/${filename}`;
 
-    // Insert into database
-    const result = await query<InsertResult>({
-      query: "INSERT INTO schools (name, address, city, state, contact, image, email_id) VALUES (?, ?, ?, ?, ?, ?, ?)",
-      values: [name, address, city, state, contact, imagePath, email_id],
-    });
+    // Insert into database using the connection
+    const [result] = await connection.execute(
+      "INSERT INTO schools (name, address, city, state, contact, image, email_id) VALUES (?, ?, ?, ?, ?, ?, ?)",
+      [name, address, city, state, contact, imagePath, email_id]
+    );
+
+    const insertResult = result as InsertResult;
 
     return NextResponse.json(
       {
         message: 'School added successfully!',
-        schoolId: result.insertId,
+        schoolId: insertResult.insertId,
       },
       { status: 200 }
     );
@@ -159,6 +171,11 @@ export async function POST(request: NextRequest) {
       },
       { status: 500 }
     );
+  } finally {
+    // release the connection back to the pool
+    if (connection) {
+      connection.release();
+    }
   }
 }
 

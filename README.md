@@ -9,6 +9,7 @@ This application provides an **admin dashboard** for managing school information
 ![MySQL](https://img.shields.io/badge/MySQL-8.0-blue?style=for-the-badge&logo=mysql)
 ![Vercel](https://img.shields.io/badge/Vercel-Deployed-black?style=for-the-badge&logo=vercel)
 
+
 ---
 
 ## Live Demo
