@@ -45,8 +45,5 @@ next-env.d.ts
 # local env files
 .env.local
 
-# Ignore database connection files
-src/lib/db.ts
-
 # MySQL 
 .sql*

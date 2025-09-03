@@ -1,9 +1,8 @@
-// src/lib/db.ts
 import mysql from 'mysql2/promise';
 
 let pool: mysql.Pool | null = null;
 
-export function getPool() {
+export function getPool(): mysql.Pool {
   if (!pool) {
     pool = mysql.createPool({
       host: process.env.MYSQL_HOST,
@@ -28,6 +27,6 @@ export async function query<T = any>({
   values?: any[];
 }): Promise<T> {
   const pool = getPool();
-  const [results] = await pool.execute(query, values);
-  return results as T;
+  const [results] = await pool.execute<mysql.RowDataPacket[] | mysql.OkPacket>(query, values);
+  return results as unknown as T;
 }

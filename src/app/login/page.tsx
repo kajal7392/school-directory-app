@@ -1,10 +1,8 @@
-// src/app/login/page.tsx
 'use client';
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
-import Link from 'next/link';
 
 export default function LoginPage() {
   const [username, setUsername] = useState('');
@@ -41,7 +39,7 @@ export default function LoginPage() {
     try {
       // Use the login function from AuthContext instead of direct fetch
       const success = await login(username, password);
-      
+
       if (success) {
         router.push('/');
         router.refresh();

@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import styles from './page.module.css';
+import Image from 'next/image';
 
 interface School {
   id: number;
@@ -160,13 +161,14 @@ export default function ShowSchools() {
             {currentSchools.map((school) => (
               <div key={school.id} className={styles.schoolCard}>
                 <div className={styles.imageContainer}>
-                  <img 
-                    src={school.image} 
+                  <Image
+                    src={school.image}
                     alt={school.name}
+                    width={500}         
+                    height={300}     
                     className={styles.schoolImage}
-                    onError={(e) => {
-                      e.currentTarget.src = '/default-school.jpg';
-                    }}
+                    onError={(e) => {                    }}
+                    unoptimized={false}  
                   />
                   <div className={styles.overlay}>
                     <button className={styles.viewButton}>View Details</button>

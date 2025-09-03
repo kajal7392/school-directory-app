@@ -1,4 +1,3 @@
-// src/app/api/get-schools/route.ts
 import { query } from '@/lib/db';
 import { NextRequest, NextResponse } from 'next/server';
 
@@ -13,18 +12,29 @@ export async function GET(request: NextRequest) {
     const validOrder = ['ASC', 'DESC'];
 
     const sortField = validSortFields.includes(sortBy) ? sortBy : 'name';
-    const sortOrder = validOrder.includes(order.toUpperCase()) ? order : 'ASC';
+    const sortOrder = validOrder.includes(order.toUpperCase()) ? order.toUpperCase() : 'ASC';
 
     const results = await query({
       query: `SELECT id, name, address, city, image FROM schools ORDER BY ${sortField} ${sortOrder}`,
     });
 
     return NextResponse.json({ schools: results });
-  } catch (error: any) {
-    console.error('API Error:', error);
-    return NextResponse.json({ 
-      message: 'Internal server error', 
-      error: error.message 
-    }, { status: 500 });
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      console.error('API Error:', error.message);
+      return NextResponse.json(
+        {
+          message: 'Internal server error',
+          error: error.message,
+        },
+        { status: 500 }
+      );
+    } else {
+      console.error('Unknown API error:', error);
+      return NextResponse.json(
+        { message: 'Internal server error' },
+        { status: 500 }
+      );
+    }
   }
 }

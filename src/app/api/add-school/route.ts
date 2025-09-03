@@ -1,14 +1,19 @@
-// src/app/api/add-school/route.ts
 import { query } from '@/lib/db';
 import { NextRequest, NextResponse } from 'next/server';
 import path from 'path';
 import { verifyToken } from '@/lib/auth';
 import fs from 'fs/promises';
 
-export async function POST(request: NextRequest) {
-  
-  try {
+interface UserRole {
+  role: string;
+}
 
+interface InsertResult {
+  insertId: number;
+}
+
+export async function POST(request: NextRequest) {
+  try {
     let token: string | null = null;
     // Authentication check
     const authHeader = request.headers.get('authorization');
@@ -16,15 +21,19 @@ export async function POST(request: NextRequest) {
 
     if (!token) {
       const cookieHeader = request.headers.get('cookie');
-      token = cookieHeader?.split(';').find(cookie => cookie.trim().startsWith('auth-token='))?.split('=')[1] ?? null;
+      token = cookieHeader
+        ?.split(';')
+        .find((cookie) => cookie.trim().startsWith('auth-token='))
+        ?.split('=')[1] ?? null;
     }
 
     console.log('Token found:', !!token);
 
-    if(!token) {
+    if (!token) {
       return NextResponse.json({ error: 'Authentication required' }, { status: 401 });
     }
-    let decoded;
+
+    let decoded: { userId: number };
     try {
       decoded = verifyToken(token);
       console.log('Decoded token:', decoded);
@@ -34,44 +43,46 @@ export async function POST(request: NextRequest) {
     }
 
     // Authorization check - using users table instead of admins
-    const user = await query({
+    const user = await query<UserRole[]>({
       query: 'SELECT role FROM users WHERE id = ?',
       values: [decoded.userId],
     });
 
-    console.log('User role:', user);
+    console.log('User  role:', user);
 
     if (!user || user.length === 0) {
-      console.log('User not found in database');
+      console.log('User  not found in database');
       return NextResponse.json({ error: 'Unauthorized' }, { status: 403 });
     }
 
     if (user[0].role !== 'admin') {
-      console.log('User is not an admin, role:', user[0].role);
+      console.log('User  is not an admin, role:', user[0].role);
       return NextResponse.json({ error: 'Admin privileges required' }, { status: 403 });
     }
 
-    console.log('User authorized as admin, proceeding with school addition');
-    // ... rest of the code remains the same for file handling and school insertion
+    console.log('User  authorized as admin, proceeding with school addition');
     // Parse form data
     const formData = await request.formData();
 
     // Extract and validate fields
-    const name = formData.get('name') as string;
-    const address = formData.get('address') as string;
-    const city = formData.get('city') as string;
-    const state = formData.get('state') as string;
-    const contact = formData.get('contact') as string;
-    const email_id = formData.get('email_id') as string;
+    const name = formData.get('name') as string | null;
+    const address = formData.get('address') as string | null;
+    const city = formData.get('city') as string | null;
+    const state = formData.get('state') as string | null;
+    const contact = formData.get('contact') as string | null;
+    const email_id = formData.get('email_id') as string | null;
     const imageFile = formData.get('image') as File | null;
 
     // Validate required text fields
-    const requiredFields = { name, address, city, state, contact, email_id };
+    const requiredFields: Record<string, string | null> = { name, address, city, state, contact, email_id };
     for (const [field, value] of Object.entries(requiredFields)) {
       if (!value) {
-        return NextResponse.json({ 
-          message: `${field.charAt(0).toUpperCase() + field.slice(1)} is required` 
-        }, { status: 400 });
+        return NextResponse.json(
+          {
+            message: `${field.charAt(0).toUpperCase() + field.slice(1)} is required`,
+          },
+          { status: 400 }
+        );
       }
     }
 
@@ -82,13 +93,15 @@ export async function POST(request: NextRequest) {
 
     const allowedTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
     if (!allowedTypes.includes(imageFile.type)) {
-      return NextResponse.json({ message: 'Only JPG, PNG, WEBP, and GIF images are allowed' }, { status: 400 });
+      return NextResponse.json(
+        { message: 'Only JPG, PNG, WEBP, and GIF images are allowed' },
+        { status: 400 }
+      );
     }
-
 
     // Validate email format
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email_id)) {
+    if (!emailRegex.test(email_id!)) {
       return NextResponse.json({ message: 'Invalid email format' }, { status: 400 });
     }
 
@@ -124,7 +137,7 @@ export async function POST(request: NextRequest) {
     const imagePath = `/schoolImages/${filename}`;
 
     // Insert into database
-    const result = await query({
+    const result = await query<InsertResult>({
       query: `
         INSERT INTO schools (name, address, city, state, contact, image, email_id) 
         VALUES (?, ?, ?, ?, ?, ?, ?)
@@ -132,17 +145,23 @@ export async function POST(request: NextRequest) {
       values: [name, address, city, state, contact, imagePath, email_id],
     });
 
-    return NextResponse.json({ 
-      message: 'School added successfully!', 
-      schoolId: result.insertId 
-    }, { status: 200 });
-
-  } catch (error: any) {
+    return NextResponse.json(
+      {
+        message: 'School added successfully!',
+        schoolId: result.insertId,
+      },
+      { status: 200 }
+    );
+  } catch (error: unknown) {
     console.error('API Error:', error);
-    return NextResponse.json({ 
-      message: 'Internal server error', 
-      error: error.message 
-    }, { status: 500 });
+    const message = error instanceof Error ? error.message : 'Unknown error';
+    return NextResponse.json(
+      {
+        message: 'Internal server error',
+        error: message,
+      },
+      { status: 500 }
+    );
   }
 }
 

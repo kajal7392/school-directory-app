@@ -4,6 +4,8 @@ import { useForm } from 'react-hook-form';
 import styles from './page.module.css';
 import ProtectedRoute from '@/components/ProtectedRoute';
 import { useState } from 'react';
+import Image from 'next/image';
+
 
 interface SchoolFormData {
   name: string;
@@ -268,12 +270,19 @@ export default function AddSchool() {
             />
             <p className={styles.error}>{errors.image?.message}</p>
 
-            {previewImage && (
-              <div className={styles.imagePreview}>
-                <img src={previewImage} alt="School preview" />
-                <p className={styles.imageNote}>Image Preview</p>
-              </div>
-            )}
+          {previewImage && (
+            <div className={styles.imagePreview}>
+              <Image
+                src={previewImage}
+                alt="School preview"
+                width={500}     
+                height={300}   
+                className={styles.imagePreviewImg} 
+              />
+              <p className={styles.imageNote}>Image Preview</p>
+            </div>
+          )}
+
           </div>
 
           {/* Submit Button */}
