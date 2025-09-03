@@ -279,4 +279,3 @@ Next.js team for the amazing framework
 Vercel for seamless deployment
 
 MySQL for reliable database management
-
