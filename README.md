@@ -86,7 +86,46 @@ This application provides an **admin dashboard** for managing school information
 
 ---
 
-## Installation
+## 📁 Project Structure
+
+SCHOOL-DIRECTORY-APP
+├─ public/
+│ ├─ schoolImages/ # Uploaded school images
+│ └─ avatars/ # User/Admin avatars
+├─ src/
+│ ├─ app/
+│ │ ├─ addSchool/ # Add School Page
+│ │ ├─ showSchools/ # School Listing Page
+│ │ ├─ login/ # Authentication Page
+│ │ ├─ api/ # Next.js API Routes
+│ │ │ ├─ add-school/
+│ │ │ ├─ get-schools/
+│ │ │ └─ auth/ # Login, Logout, Me
+│ │ ├─ globals.css
+│ │ └─ layout.tsx
+│ ├─ components/
+│ │ └─ ProtectedRoute.tsx
+│ ├─ context/
+│ │ └─ AuthContext.tsx
+│ ├─ lib/
+│ │ ├─ db.ts # MySQL connection
+│ │ ├─ auth.ts
+│ │ └─ avatar.ts
+│ └─ types/
+│ └─ database.ts
+├─ schema.sql # Database schema
+├─ admin.sql # Optional: Admin seed
+├─ next.config.ts
+├─ package.json
+├─ tsconfig.json
+└─ README.md
+
+yaml
+Copy code
+
+---
+
+## ⚙️ Installation
 
 Clone repository:
 
