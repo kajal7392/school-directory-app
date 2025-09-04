@@ -234,6 +234,7 @@ See [LICENSE](LICENSE) for details.
 
 ## Support
 
+<<<<<<< HEAD
 For questions or issues, open a GitHub Issue:  
 [School Directory App Issues](https://github.com/kajal7392/school-directory-app/issues)
 
@@ -244,3 +245,6 @@ For questions or issues, open a GitHub Issue:
 - Next.js team for the amazing framework  
 - Vercel for seamless deployment  
 - MySQL for reliable database management  
+=======
+MySQL for reliable database management
+>>>>>>> 1d66028 (Update README.md)

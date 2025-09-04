@@ -1,8 +1,16 @@
 import { NextRequest, NextResponse } from 'next/server';
-import path from 'path';
+import { v2 as cloudinary } from 'cloudinary';
 import { verifyToken } from '@/lib/auth';
 import fs from 'fs/promises';
 import { getPool } from '@/lib/db';
+import { query } from '@/lib/db';
+
+// Configure Cloudinary
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
 
 interface UserRole {
   role: string;
@@ -18,8 +26,8 @@ export async function POST(request: NextRequest) {
   let connection;
   
   try {
+    // Extract token from Authorization header or cookie (preserving original fallback)
     let token: string | null = null;
-    // Authentication check
     const authHeader = request.headers.get('authorization');
     token = authHeader?.startsWith('Bearer ') ? authHeader.slice(7) : null;
 
@@ -31,18 +39,15 @@ export async function POST(request: NextRequest) {
         ?.split('=')[1] ?? null;
     }
 
-    console.log('Token found:', !!token);
-
     if (!token) {
       return NextResponse.json({ error: 'Authentication required' }, { status: 401 });
     }
 
+    // Verify token
     let decoded: { userId: number };
     try {
       decoded = verifyToken(token);
-      console.log('Decoded token:', decoded);
     } catch (error) {
-      console.error('Token verification failed:', error);
       return NextResponse.json({ error: 'Invalid token' }, { status: 401 });
     }
 
@@ -61,6 +66,13 @@ export async function POST(request: NextRequest) {
 
     if (!user || user.length === 0) {
       console.log('User not found in database');
+    // Check user role from DB
+    const user = await query<UserRole[]>({
+      query: 'SELECT role FROM users WHERE id = ?',
+      values: [decoded.userId],
+    });
+
+    if (!user || user.length === 0) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 403 });
     }
 
@@ -71,10 +83,13 @@ export async function POST(request: NextRequest) {
 
     console.log('User authorized as admin, proceeding with school addition');
     
+      return NextResponse.json({ error: 'Admin privileges required' }, { status: 403 });
+    }
+
     // Parse form data
     const formData = await request.formData();
 
-    // Extract and validate fields
+    // Extract fields
     const name = formData.get('name') as string | null;
     const address = formData.get('address') as string | null;
     const city = formData.get('city') as string | null;
@@ -88,19 +103,18 @@ export async function POST(request: NextRequest) {
     for (const [field, value] of Object.entries(requiredFields)) {
       if (!value) {
         return NextResponse.json(
-          {
-            message: `${field.charAt(0).toUpperCase() + field.slice(1)} is required`,
-          },
+          { message: `${field.charAt(0).toUpperCase() + field.slice(1)} is required` },
           { status: 400 }
         );
       }
     }
 
-    // Validate image file
+    // Validate image file presence
     if (!imageFile) {
       return NextResponse.json({ message: 'School image is required' }, { status: 400 });
     }
 
+    // Validate image type
     const allowedTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
     if (!allowedTypes.includes(imageFile.type)) {
       return NextResponse.json(
@@ -111,48 +125,42 @@ export async function POST(request: NextRequest) {
 
     // Validate email format
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email_id!)) {
+    if (!emailRegex.test(email_id as string)) {
       return NextResponse.json({ message: 'Invalid email format' }, { status: 400 });
     }
 
-    // Validate image file type
-    if (!imageFile.type.startsWith('image/')) {
-      return NextResponse.json({ message: 'Uploaded file must be an image' }, { status: 400 });
-    }
-
-    // Check if image size is reasonable (max 5MB)
+    // Validate image size (max 5MB)
     const maxSize = 5 * 1024 * 1024; // 5MB
     if (imageFile.size > maxSize) {
       return NextResponse.json({ message: 'Image size must be less than 5MB' }, { status: 400 });
     }
 
-    // Create upload directory if it doesn't exist
-    const uploadDir = path.join(process.cwd(), 'public', 'schoolImages');
-    try {
-      await fs.access(uploadDir);
-    } catch {
-      await fs.mkdir(uploadDir, { recursive: true });
-    }
-
-    // Generate unique filename
-    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
-    const filename = `school-${uniqueSuffix}${path.extname(imageFile.name)}`;
-    const filePath = path.join(uploadDir, filename);
-
-    // Save image to filesystem
+    // Convert File to buffer for Cloudinary upload
     const bytes = await imageFile.arrayBuffer();
     const buffer = Buffer.from(bytes);
-    await fs.writeFile(filePath, buffer);
 
-    const imagePath = `/schoolImages/${filename}`;
+    // Upload to Cloudinary using upload_stream
+    const uploadResult = await new Promise<any>((resolve, reject) => {
+      const uploadStream = cloudinary.uploader.upload_stream(
+        { folder: 'school-images' },
+        (error, result) => {
+          if (error) reject(error);
+          else resolve(result);
+        }
+      );
+      // Create a readable stream from buffer and pipe to uploadStream
+      const { Readable } = require('stream');
+      const stream = Readable.from(buffer);
+      stream.pipe(uploadStream);
+    });
 
     // Insert into database using the connection
-    const [result] = await connection.execute(
+    const [dbResult] = await connection.execute(
       "INSERT INTO schools (name, address, city, state, contact, image, email_id) VALUES (?, ?, ?, ?, ?, ?, ?)",
-      [name, address, city, state, contact, imagePath, email_id]
+      [name, address, city, state, contact, uploadResult.secure_url, email_id]
     );
 
-    const insertResult = result as InsertResult;
+    const insertResult = dbResult as InsertResult;
 
     return NextResponse.json(
       {
